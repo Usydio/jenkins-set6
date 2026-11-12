@@ -111,34 +111,23 @@ pipeline {
  
 
         stage('Deploy Application') {
-
             steps {
-
                 echo 'Deploying application locally'
 
- 
-
                 sh '''
+                    set -eu
 
-                    docker rm -f ${CONTAINER_NAME} || true
-
- 
+                    docker rm -f local-cicd-demo || true
 
                     docker run -d \
+                        --name local-cicd-demo \
+                        -p 8081:80 \
+                        local-cicd-demo:3
 
-                        --name ${CONTAINER_NAME} \
-
-                        --restart unless-stopped \
-
-                        -p ${APP_PORT}:80 \
-
-                        ${IMAGE_NAME}:${BUILD_NUMBER}
-
+                    echo "Application deployed successfully"
                 '''
-
-            }
-
-        }
+    }
+}
 
  
 
